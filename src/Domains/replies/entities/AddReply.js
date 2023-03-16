@@ -3,19 +3,23 @@ class AddReply {
   constructor(payload) {
     this._verifyPayload(payload);
 
-    const { content, threadId, commentId } = payload;
+    const {
+      content, commentId, owner,
+    } = payload;
 
     this.content = content;
-    this.threadId = threadId;
     this.commentId = commentId;
+    this.owner = owner;
   }
 
-  _verifyPayload({ content, threadId, commentId }) {
-    if (!content || !threadId || !commentId) {
+  _verifyPayload({
+    content, commentId, owner,
+  }) {
+    if (!content || !commentId || !owner) {
       throw new Error('ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof content !== 'string' || typeof threadId !== 'string' || typeof commentId !== 'string') {
+    if (typeof content !== 'string' || typeof commentId !== 'string' || typeof owner !== 'string') {
       throw new Error('ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

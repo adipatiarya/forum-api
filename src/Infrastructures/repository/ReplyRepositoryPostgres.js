@@ -10,8 +10,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     this._idGenerator = idGnerator;
   }
 
-  async addReply(owner, reply) {
-    const { content, commentId } = reply;
+  async addReply(reply) {
+    const { content, commentId, owner } = reply;
     const id = `reply-${this._idGenerator()}`;
 
     const query = {

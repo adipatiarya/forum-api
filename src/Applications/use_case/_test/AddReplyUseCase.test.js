@@ -8,18 +8,20 @@ const AddReplyUseCase = require('../AddReplyUseCase');
 describe('AddReplyUseCase', () => {
   it('should orchestrating the add reply action correctly', async () => {
     // Arrange
-    const owner = 'user-123';
 
     const useCasePayload = {
       content: 'sebuah balasan',
       commentId: 'comment-123',
       threadId: 'thread-123',
+      owner: 'user-123',
     };
+
+    const { content, commentId, owner } = useCasePayload;
 
     const mockAddedReply = new AddedReply({
       id: 'reply-123',
       content: useCasePayload.content,
-      owner,
+      owner: useCasePayload.owner,
     });
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
@@ -35,14 +37,15 @@ describe('AddReplyUseCase', () => {
       commentRepository: mockCommentRepository,
       replyRepository: mockReplyRepository,
     });
-    const result = await getReplyUseCase.execute(owner, useCasePayload);
+    const result = await getReplyUseCase.execute(useCasePayload);
     expect(result).toStrictEqual(new AddedReply({
       id: 'reply-123',
-      content: useCasePayload.content,
+      content: 'sebuah balasan',
       owner: 'user-123',
     }));
     expect(mockThreadRepository.verifyThreadExist).toBeCalledWith(useCasePayload.threadId);
     expect(mockCommentRepository.verifyCommentExist).toBeCalledWith(useCasePayload.commentId);
-    expect(mockReplyRepository.addReply).toBeCalledWith(owner, new AddReply(useCasePayload));
+    expect(mockReplyRepository.addReply)
+      .toBeCalledWith(new AddReply({ content, commentId, owner }));
   });
 });

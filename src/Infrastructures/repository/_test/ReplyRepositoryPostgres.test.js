@@ -104,18 +104,16 @@ describe('ReplyRepository', () => {
   describe('addReply function', () => {
     it('should persist add comment and return added comment correctly', async () => {
       // Arrange
-
-      const owner = 'user-123';
       const reply = new AddReply({
+        owner: 'user-123',
         content: 'sebuah balasan',
-        threadId: 'thread-123',
         commentId: 'comment-123',
       });
       const fakeIdGenerator = () => '123'; // stub!
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await replyRepositoryPostgres.addReply(owner, reply);
+      await replyRepositoryPostgres.addReply(reply);
 
       // Assert
       const results = await RepliesTableTestHelper.findRepliesById('reply-123');
@@ -123,18 +121,16 @@ describe('ReplyRepository', () => {
     });
     it('should return added reply correctly', async () => {
       // Arrange
-
-      const owner = 'user-123';
       const reply = new AddReply({
         content: 'sebuah balasan',
         commentId: 'comment-123',
-        threadId: 'thread-123',
+        owner: 'user-123',
       });
       const fakeIdGenerator = () => '123'; // stub!
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const result = await replyRepositoryPostgres.addReply(owner, reply);
+      const result = await replyRepositoryPostgres.addReply(reply);
 
       // Assert
       expect(result).toStrictEqual(new AddedReply({
