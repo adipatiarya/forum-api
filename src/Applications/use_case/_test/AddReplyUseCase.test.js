@@ -25,11 +25,9 @@ describe('AddReplyUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.verifyThreadExist = jest.fn().mockImplementation();
-    mockCommentRepository.verifyCommentExist = jest.fn().mockImplementation();
-    mockReplyRepository.addReply = jest.fn().mockImplementation(
-      () => Promise.resolve(mockAddedReply),
-    );
+    mockThreadRepository.verifyThreadExist = jest.fn();
+    mockCommentRepository.verifyCommentExist = jest.fn();
+    mockReplyRepository.addReply = jest.fn(() => Promise.resolve(mockAddedReply));
 
     /** creating use case instance */
     const getReplyUseCase = new AddReplyUseCase({

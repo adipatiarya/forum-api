@@ -28,20 +28,20 @@ describe('Detail Thread usecase', () => {
       }],
     };
 
-    mockThreadRepository.verifyThreadExist = jest.fn().mockImplementation();
-    mockThreadRepository.getThreadById = jest.fn().mockImplementation(
+    mockThreadRepository.verifyThreadExist = jest.fn();
+    mockThreadRepository.getThreadById = jest.fn(
       () => Promise.resolve({
         id: 'thread-123', title: 'title', body: 'body', date: 'date', username: 'dicoding',
       }),
     );
     // mengembalikan return array
-    mockCommentRepository.getCommentsByThreadId = jest.fn().mockImplementation(
+    mockCommentRepository.getCommentsByThreadId = jest.fn(
       () => Promise.resolve([{
         id: 'comment-123', username: 'dicoding', date: 'date', content: 'abc', is_deleted: 'false',
       }]),
     );
     // mengembalikan return array
-    mockReplyRepository.getRepliesByCommentId = jest.fn().mockImplementation(
+    mockReplyRepository.getRepliesByCommentId = jest.fn(
       () => Promise.resolve([{
         id: 'reply-123', username: 'you', date: 'date', content: 'abc', is_deleted: 'false',
       }]),

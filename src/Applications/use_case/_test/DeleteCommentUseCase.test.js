@@ -8,9 +8,9 @@ describe('DeleteCommentUseCase', () => {
     const id = 'comment-123';
     const owner = 'user-123';
     const mockCommentRepository = new CommentRepository();
-    mockCommentRepository.verifyCommentExist = jest.fn().mockImplementation();
-    mockCommentRepository.verifyCommentOwner = jest.fn().mockImplementation();
-    mockCommentRepository.deleteCommentById = jest.fn().mockImplementation();
+    mockCommentRepository.verifyCommentExist = jest.fn();
+    mockCommentRepository.verifyCommentOwner = jest.fn();
+    mockCommentRepository.deleteCommentById = jest.fn();
     const deleteCommentUseCase = new DeleteCommentUseCase({ commentRepository: mockCommentRepository });
     await deleteCommentUseCase.execute(id, owner);
 
