@@ -23,8 +23,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     return result.rows;
   }
 
-  async addComment(owner, comment) {
-    const { content, threadId } = comment;
+  async addComment({ content, threadId, owner }) {
     const id = `comment-${this._idGenerator()}`;
 
     const query = {
