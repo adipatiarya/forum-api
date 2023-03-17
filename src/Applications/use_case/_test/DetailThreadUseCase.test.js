@@ -1,4 +1,5 @@
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
+const LikeRepository = require('../../../Domains/likes/LikeRepository');
 const GetReply = require('../../../Domains/replies/entities/GetReply');
 const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
@@ -10,6 +11,7 @@ describe('Detail Thread usecase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
+    const mockLikeRepository = new LikeRepository();
 
     const expectedThread = {
       id: 'thread-123',
@@ -22,6 +24,7 @@ describe('Detail Thread usecase', () => {
         username: 'dicoding',
         date: 'date',
         content: 'abc',
+        likeCount: 1,
         replies: [new GetReply({
           id: 'reply-123', username: 'you', date: 'date', content: 'abc',
         })],
@@ -48,6 +51,7 @@ describe('Detail Thread usecase', () => {
         content: 'abc',
         is_deleted: 'false',
         thread_id: 'thread-123',
+        comment_id: 'comment-123',
       }]),
     );
     // mengembalikan return array
@@ -62,6 +66,8 @@ describe('Detail Thread usecase', () => {
       }]),
     );
 
+    mockLikeRepository.count = jest.fn(() => Promise.resolve([{ comment_id: 'comment-123' }]));
+
     /** ARRANGE */
 
     // Action
@@ -69,6 +75,7 @@ describe('Detail Thread usecase', () => {
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
       replyRepository: mockReplyRepository,
+      likeRepository: mockLikeRepository,
     });
 
     const result = await detailThreadUseCase.execute('thread-123');
@@ -78,5 +85,6 @@ describe('Detail Thread usecase', () => {
     expect(mockThreadRepository.getThreadById).toBeCalledWith('thread-123');
     expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith('thread-123');
     expect(mockReplyRepository.getRepliesByCommentId).toBeCalledWith(['comment-123']);
+    expect(mockLikeRepository.count).toBeCalledWith(['comment-123']);
   });
 });
