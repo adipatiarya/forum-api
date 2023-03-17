@@ -22,6 +22,7 @@ describe('ReplyRepository', () => {
 
     // Kirun mengomentari thread decoding dengan komantar id = comment-123
     await CommentsTableTestHelper.addComment({ id: 'comment-123', owner: 'user-456' });
+    await CommentsTableTestHelper.addComment({ id: 'comment-124', owner: 'user-456' });
   });
   afterEach(async () => {
     await UsersTableTestHelper.cleanTable();
@@ -38,9 +39,7 @@ describe('ReplyRepository', () => {
     it('should return of replies', async () => {
       await RepliesTableTestHelper.addReply({});
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
-      const results = await replyRepositoryPostgres.getRepliesByCommentId('comment-123');
-
-      expect(results).toHaveLength(1);
+      const results = await replyRepositoryPostgres.getRepliesByCommentId(['comment-123']);
       expect(results).toEqual([{
         comment_id: 'comment-123',
         content: 'sebuah balasan',

@@ -21,29 +21,44 @@ describe('Detail Thread usecase', () => {
         id: 'comment-123',
         username: 'dicoding',
         date: 'date',
+        content: 'abc',
         replies: [new GetReply({
           id: 'reply-123', username: 'you', date: 'date', content: 'abc',
         })],
-        content: 'abc',
+
       }],
     };
 
     mockThreadRepository.verifyThreadExist = jest.fn();
     mockThreadRepository.getThreadById = jest.fn(
       () => Promise.resolve({
-        id: 'thread-123', title: 'title', body: 'body', date: 'date', username: 'dicoding',
+        id: 'thread-123',
+        title: 'title',
+        body: 'body',
+        date: 'date',
+        username: 'dicoding',
       }),
     );
     // mengembalikan return array
     mockCommentRepository.getCommentsByThreadId = jest.fn(
       () => Promise.resolve([{
-        id: 'comment-123', username: 'dicoding', date: 'date', content: 'abc', is_deleted: 'false',
+        id: 'comment-123',
+        username: 'dicoding',
+        date: 'date',
+        content: 'abc',
+        is_deleted: 'false',
+        thread_id: 'thread-123',
       }]),
     );
     // mengembalikan return array
     mockReplyRepository.getRepliesByCommentId = jest.fn(
       () => Promise.resolve([{
-        id: 'reply-123', username: 'you', date: 'date', content: 'abc', is_deleted: 'false',
+        id: 'reply-123',
+        username: 'you',
+        date: 'date',
+        content: 'abc',
+        is_deleted: 'false',
+        comment_id: 'comment-123',
       }]),
     );
 
@@ -62,6 +77,6 @@ describe('Detail Thread usecase', () => {
     expect(mockThreadRepository.verifyThreadExist).toBeCalledWith('thread-123');
     expect(mockThreadRepository.getThreadById).toBeCalledWith('thread-123');
     expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith('thread-123');
-    expect(mockReplyRepository.getRepliesByCommentId).toBeCalledWith('comment-123');
+    expect(mockReplyRepository.getRepliesByCommentId).toBeCalledWith(['comment-123']);
   });
 });

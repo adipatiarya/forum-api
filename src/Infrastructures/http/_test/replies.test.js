@@ -127,6 +127,7 @@ describe('/threads/id/comments endpoints', () => {
           },
         });
         const { data: { addedThread: { id: threadId } } } = JSON.parse(threadResponse.payload);
+
         const commentResponse = await server.inject({
           method: 'POST',
           url: `/threads/${threadId}/comments`,

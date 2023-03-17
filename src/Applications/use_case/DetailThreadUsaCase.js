@@ -13,9 +13,23 @@ class DetailThreadUseCase {
   async execute(threadId) {
     await this._threadRepository.verifyThreadExist(threadId);
     const thread = await this._threadRepository.getThreadById(threadId);
-    const comments = await this._commentRepository.getCommentsByThreadId(thread.id);
+    const commentRepo = await this._commentRepository.getCommentsByThreadId(thread.id);
+    const replyRepo = await this._replyRepository.getRepliesByCommentId(commentRepo.map((comment) => comment.id));
 
-    return new Promise((resolve) => {
+    const comments = commentRepo.map((comment) => {
+      const newComment = new GetComment(comment);
+      const replies = replyRepo.filter((reply) => reply.comment_id === newComment.id).map((r) => new GetReply(r));
+      const {
+        id, username, date, content,
+      } = newComment;
+      return {
+        id, username, date, replies, content,
+      };
+    });
+
+    return { ...thread, comments };
+
+    /* return new Promise((resolve) => {
       Promise.all(comments.map(async (comment) => {
         const newComment = new GetComment(comment);
 
@@ -31,6 +45,7 @@ class DetailThreadUseCase {
         };
       })).then((s) => resolve({ ...thread, comments: s }));
     });
+    */
   }
 }
 
