@@ -12,7 +12,7 @@ class LikesHandler {
     const likeCommentCase = this._container.getInstance(LikeCommentUseCase.name);
     await likeCommentCase.execute(request.params, owner);
     return {
-      status: 'ok',
+      status: 'success',
     };
   }
 }
